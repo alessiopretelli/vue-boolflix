@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+        <title>Boolflix</title>
+</head>
+<body>
+    <div id='app'>
+        <button @click='searching'>Enter</button>
+        <input  @keyUp.enter='searching' placeholder="Search" v-model='search' type="text">
+    
+        <div class="movies">
+            <div class="mov" v-for='movie in movies[0]'>
+                <p>Title: {{movie.title}}</p>
+                <p>Original title: {{movie.original_title}}</p>
+                <p>Original language: {{movie.original_language}}</p>
+                <p class="vote"> Vote: 
+                    <i class="fas fa-star" v-for='star in Math.ceil(movie.vote_average / 2)'></i>
+                    <i class="far fa-star" v-for='st in 5 - Math.ceil(movie.vote_average / 2)'></i>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="main.js"></script>
+</body>
+</html>

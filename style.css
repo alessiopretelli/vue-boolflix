@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#app {
+    text-align: center;
+    padding: 5px;
+}
+
+.movies {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.mov {
+    width: 200px;
+    text-align: center;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.vote {
+    display: flex;
+    justify-content: center;
+}
