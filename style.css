@@ -16,7 +16,7 @@
 }
 
 .mov {
-    width: 200px;
+    min-width: 185px;
     text-align: center;
     border: 1px solid black;
     margin: 5px;

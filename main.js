@@ -2,6 +2,7 @@ var app = new Vue({
     el: '#app',
     data: {
         movies: [],
+        flag: ['gb', 'it', 'es', 'fr', 'de'],
         search: ''
     },
     methods: {
@@ -10,41 +11,82 @@ var app = new Vue({
             if (this.search == 0) {
                 this.movies = [];
             } else {
+                //chiamata API per film
                 axios
                 .get('https://api.themoviedb.org/3/search/movie?api_key=1054834a21f5e84aed95192bd4b277cd&', { params: { query: this.search } })
                 .then((result) => {
-                    this.movies = [];
-                    this.movies.push(result.data.results);
 
-                    this.movies[0].forEach((element) => {                        
-                        axios
-                        .get(`https://flagcdn.com/${element.original_language}/codes.json`)
-                        .then((res) => {
-                            //res da' stato 200 a 'en' ma non restituisce alcun png, pur inserendo le bandiere di altri paesi anglofoni; l'ho quindi escluso.
-                            if((res.status == 200) && (element.original_language != 'en')) {
-                                element.original_language = [element.original_language];
-                                element.original_language.push(
-                                    'https://flagcdn.com/16x12/' + element.original_language[0] + '.png',
-                                    'ok'
-                                );
-                            }
-
-                            if(element.original_language == 'en') {
-                                element.original_language = [element.original_language];
-                                element.original_language.push(
-                                    'https://www.countryflags.io/gb/flat/16.png',
-                                    'ok'
-                                );
-                            }
-
-                        });
+                    result.data.results.forEach((element) => {
+                        this.movies.push(element);
                     });
 
-                    console.log(this.movies);
                 });
-                
+                //chiamata API per serie TV con adattamento per in interpretazione nell'HTML
+                axios
+                .get('https://api.themoviedb.org/3/search/tv?api_key=1054834a21f5e84aed95192bd4b277cd&', { params: { query: this.search } })
+                .then((re) => {
+                    //metodo adattamento serie TV
+                    this.convert(re);
+                    console.log(this.movies);
+                    //metodo bandiere. A volte non carica tutte le bandiere per problemi di connessione.
+                    this.flags();
+                    //metodo copertina
+                    this.PosterPath();
+                    //metodo ordinamento per popolarita'
+                    this.IsPopular();
+                });
+
                 this.search = '';
             }
+        },
+        flags: function() {
+
+            this.movies.forEach((element) => {
+
+                if (element.original_language == 'en') {
+                    element.original_language = 'gb';
+                }
+                
+                if (this.flag.includes(element.original_language)) {
+                    element.original_language = [element.original_language];
+                    element.original_language.push(
+                        `https://www.countryflags.io/${element.original_language}/flat/16.png`,
+                        'ok'
+                    );
+                }
+
+            });
+        },
+        convert: function(re) {
+            re.data.results.forEach((element) => {
+                var tmp = element.original_name;
+                element.original_title = tmp;
+                tmp = element.name;
+                element.title = tmp;
+                this.movies.push(element);
+            });
+        },
+        IsPopular: function() {
+            for (let i = 0; i < this.movies.length; i++) {
+
+                for (let ii = i; ii < this.movies.length; ii++) {
+
+                    if (this.movies[i].popularity < this.movies[ii].popularity) {
+                        var tmp = this.movies[ii];
+                        this.movies[ii] = this.movies[i];
+                        this.movies[i] = tmp;
+                    }    
+
+                }
+
+            }
+        },
+        PosterPath: function() {
+            
+            this.movies.forEach((element) => {
+                element.posterURL = `https://image.tmdb.org/t/p/w185${element.poster_path}`
+            });
+
         }    
     }
 

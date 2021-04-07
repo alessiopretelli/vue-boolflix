@@ -14,15 +14,16 @@
 <body>
     <div id='app'>
         <button @click='searching'>Enter</button>
-        <input  @keyUp.enter='searching' placeholder="Search" v-model='search' type="text">
+        <input @keyUp.enter='searching' placeholder="Search" v-model='search' type="text">
     
         <div class="movies">
-            <div class="mov" v-for='movie in movies[0]'>
+            <div class="mov" v-for='movie in movies'>
+                <img :src="movie.posterURL" alt="">
                 <p>Title: {{movie.title}}</p>
-                <p>Original title: {{movie.original_title}}</p>
+                <p v-if="movie.title != movie.original_title">Original title: {{movie.original_title}}</p>
                 <p>Original language: 
                     <img v-if="movie.original_language[2] == 'ok'" :src="movie.original_language[1]" alt="">
-                    <label v-else>{{movie.original_language}}</p>
+                    <label v-else>{{movie.original_language}}</label>
                 </p>
                 <p class="vote"> Vote: 
                     <i class="fas fa-star" v-for='star in Math.ceil(movie.vote_average / 2)'></i>
