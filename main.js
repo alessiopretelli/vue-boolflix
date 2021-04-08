@@ -54,43 +54,9 @@ var app = new Vue({
                     //metodo ordinamento per popolarita'
                     this.IsPopular();
                     //metodo genere e cast
-
-                    //non funziona se concatenato, solo se inserito dentro l'axios...
-                    //anomalia: dopo la ricerca, premendo un tasto qualsiasi con la searchbar attiva si ha una parziale visualizzazione dei cast, ma non c'e' riaggiornamento pagina... 
-                    this.movies.forEach((element) => {
-
-                        var xhttp = new XMLHttpRequest();
-                        xhttp.onreadystatechange = function () {
-                            if (this.readyState == 4 && this.status == 200) {
-        
-                                if (JSON.parse(xhttp.response).cast.length >= 5) {
-                                    element.cast = [];
-        
-                                    for (let i = 0; i < 5; i++) {
-                                        element.cast.push(JSON.parse(xhttp.response).cast[i].name);
-                                    }
-                                
-                                } else if ((JSON.parse(xhttp.response).cast.length == 0)) {
-                                    element.cast = ['N/A'];
-                                } else {
-        
-                                    for (let i = 0; i < JSON.parse(xhttp.response).cast.length; i++) {
-                                        element.cast.push(JSON.parse(xhttp.response).cast[i].name);
-                                    }
-        
-                                }
-        
-                            }
-                        };
-                        xhttp.open("GET",
-                        `http://api.themoviedb.org/3/movie/${element.id}/casts?api_key=1054834a21f5e84aed95192bd4b277cd`, true);
-                        xhttp.send();
-            
-                    });
-        
-                    this.GenreNCast();
-
-                    //codice filtraggio
+                    this.GenreNCast();       
+                    //codice filtro
+                    //si possono selezionare piu' filtri
                     if (this.genreselected.length > 0) {
                         console.log(this.genreselected);
                         this.movies.forEach((element) => {
@@ -203,33 +169,33 @@ var app = new Vue({
                 //tentativo con AJAX in vanilla JS per velocita' risposta, solo il primo cast visualizzabile
                 //mancata visualizzazione a schermo del cast, forse per mia connessione lenta, ma visibile nella console
                 //anomalia: dopo la ricerca, premendo un tasto qualsiasi con la searchbar attiva si ha una parziale visualizzazione dei cast, ma non c'e' riaggiornamento pagina... 
-                //concateno AJAX in SEARCHING(): non funziona...
-                // var xhttp = new XMLHttpRequest();
-                // xhttp.onreadystatechange = function () {
-                //     if (this.readyState == 4 && this.status == 200) {
+                //concatenato AJAX in SEARCHING(): e' ancora piu' lento, non funziona...
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
 
-                //         if (JSON.parse(xhttp.response).cast.length >= 5) {
-                //             element.cast = [];
+                        if (JSON.parse(xhttp.response).cast.length >= 5) {
+                            element.cast = [];
 
-                //             for (let i = 0; i < 5; i++) {
-                //                 element.cast.push(JSON.parse(xhttp.response).cast[i].name);
-                //             }
+                            for (let i = 0; i < 5; i++) {
+                                element.cast.push(JSON.parse(xhttp.response).cast[i].name);
+                            }
                         
-                //         } else if ((JSON.parse(xhttp.response).cast.length == 0)) {
-                //             element.cast = ['N/A'];
-                //         } else {
+                        } else if ((JSON.parse(xhttp.response).cast.length == 0)) {
+                            element.cast = ['N/A'];
+                        } else {
 
-                //             for (let i = 0; i < JSON.parse(xhttp.response).cast.length; i++) {
-                //                 element.cast.push(JSON.parse(xhttp.response).cast[i].name);
-                //             }
+                            for (let i = 0; i < JSON.parse(xhttp.response).cast.length; i++) {
+                                element.cast.push(JSON.parse(xhttp.response).cast[i].name);
+                            }
 
-                //         }
+                        }
 
-                //     }
-                // };
-                // xhttp.open("GET",
-                // `http://api.themoviedb.org/3/movie/${element.id}/casts?api_key=1054834a21f5e84aed95192bd4b277cd`, true);
-                // xhttp.send();
+                    }
+                };
+                xhttp.open("GET",
+                `http://api.themoviedb.org/3/movie/${element.id}/casts?api_key=1054834a21f5e84aed95192bd4b277cd`, true);
+                xhttp.send();
 
             });
 
