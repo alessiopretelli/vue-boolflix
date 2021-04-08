@@ -3,7 +3,19 @@ var app = new Vue({
     data: {
         movies: [],
         flag: ['gb', 'it', 'es', 'fr', 'de'],
+        genres: [],
         search: ''
+    },
+    mounted() {
+        axios
+        .get('https://api.themoviedb.org/3/genre/movie/list?api_key=1054834a21f5e84aed95192bd4b277cd&language=en-US')
+        .then((response) => {
+            // console.log(response);
+            response.data.genres.forEach((e) => {
+                this.genres.push(e);
+            });
+
+        });
     },
     methods: {
         searching: function() {
@@ -21,7 +33,7 @@ var app = new Vue({
                     });
 
                 });
-                //chiamata API per serie TV con adattamento per in interpretazione nell'HTML
+                //chiamata API per serie TV con adattamento per interpretazione nell'HTML
                 axios
                 .get('https://api.themoviedb.org/3/search/tv?api_key=1054834a21f5e84aed95192bd4b277cd&', { params: { query: this.search } })
                 .then((re) => {
@@ -56,8 +68,10 @@ var app = new Vue({
                 }
 
             });
+
         },
         convert: function(re) {
+
             re.data.results.forEach((element) => {
                 var tmp = element.original_name;
                 element.original_title = tmp;
@@ -67,27 +81,33 @@ var app = new Vue({
             });
         },
         IsPopular: function() {
+
             for (let i = 0; i < this.movies.length; i++) {
 
                 for (let ii = i; ii < this.movies.length; ii++) {
 
                     if (this.movies[i].popularity < this.movies[ii].popularity) {
-                        var tmp = this.movies[ii];
+                        var tmp2 = this.movies[ii];
                         this.movies[ii] = this.movies[i];
-                        this.movies[i] = tmp;
+                        this.movies[i] = tmp2;
                     }    
 
                 }
 
             }
+
         },
         PosterPath: function() {
             
             this.movies.forEach((element) => {
-                element.posterURL = `https://image.tmdb.org/t/p/w185${element.poster_path}`
+                element.posterURL = `https://image.tmdb.org/t/p/w342${element.poster_path}`;
+                
+                if (element.poster_path == null) {
+                    element.posterURL = 'img/boolflix.png';
+                }
+
             });
 
-        }    
+        }
     }
-
 });
