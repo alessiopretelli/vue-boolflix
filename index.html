@@ -18,11 +18,21 @@
             <div class="logo">            
                 <img src="img/boolflix.png" alt="">        
             </div>
+            <div class="type">
+                <ul>
+                    <li :class="(types[index] == typeselected) ? 'red' : null" @click='filterType(index)' v-for='(type, index) in types'>{{type}}</li>
+                </ul>
+            </div>
+            <div class="genres">
+                <ul>
+                    <li :class="(glis[index] == 'selected' ? 'red' : null)" @click='filterGenre(index)' value="genre" v-for="(genre, index) in genres">{{genre.name}}</li>
+                </ul>
+            </div>
             <input @keyUp.enter='searching' placeholder="Search" v-model='search' type="text">
         </header>
     
         <div class="movies">
-            <div :class="(movie.posterURL == 'img/boolflix.png') ? 'border_it' : null" class="mov" v-for='movie in movies'>
+            <div :class="(movie.visible == false) ? 'none' : null + (movie.posterURL == 'img/boolflix.png') ? 'border_it' : null" class="mov" v-for='movie in movies'>
                 <img :class="(movie.posterURL == 'img/boolflix.png') ? 'width_it' : null" :src="movie.posterURL" alt="">
                 <div class="info_movie">                
                     <p>Title: {{movie.title}}</p>
@@ -31,6 +41,14 @@
                         <img style="margin-left: 2px;" v-if="movie.original_language[2] == 'ok'" :src="movie.original_language[1]" alt="">
                         <label style="margin-left: 2px;" v-else>{{movie.original_language}}</label>
                     </p>
+                    <div style="margin-bottom: 10px;">
+                        Genre:
+                        <div style="display: inline-block; margin: 0 2px;" v-for="g in movie.genre">{{g}}</div>
+                    </div>
+                    <div>
+                        Cast:
+                        <div style="display: inline-block; margin: 0 2px;" v-for="actor in movie.cast">{{actor}}</div>
+                    </div>
                     <div class="vote"> Vote: 
                         <i class="fas fa-star" v-for='star in Math.ceil(movie.vote_average / 2)'></i>
                         <i class="far fa-star" v-for='st in 5 - Math.ceil(movie.vote_average / 2)'></i>
