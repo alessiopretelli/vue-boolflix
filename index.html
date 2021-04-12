@@ -31,7 +31,7 @@
             <input @keyUp.enter='searching' placeholder="Search" v-model='search' type="text">
         </header>
     
-        <div class="movies">
+        <div class="movies" v-if="verify[2] == true">
             <div :class="(movie.visible == false) ? 'none' : null + (movie.posterURL == 'img/boolflix.png') ? 'border_it' : null" class="mov" v-for='movie in movies'>
                 <img :class="(movie.posterURL == 'img/boolflix.png') ? 'width_it' : null" :src="movie.posterURL" alt="">
                 <div class="info_movie">                
