@@ -40,7 +40,7 @@ var app = new Vue({
                         element.visible = true;
                         this.movies.push(element);
                     });
-
+                    //semaforo 1
                     this.verify[0] = true;
                 });
                 //chiamata API per serie TV con adattamento per interpretazione nell'HTML
@@ -49,7 +49,7 @@ var app = new Vue({
                     axios
                     .get('https://api.themoviedb.org/3/search/tv?api_key=1054834a21f5e84aed95192bd4b277cd&', { params: { query: this.search } })
                     .then((re) => {
-                        //metodo adattamento serie TV
+                        //metodo adattamento serie TV con semaforo 2
                         this.convert(re);
                         console.log(this.movies);
                         //metodo bandiere. A volte non carica tutte le bandiere per problemi di connessione.
@@ -90,7 +90,7 @@ var app = new Vue({
                             });
     
                         }
-                        
+                        //semaforo 3
                         this.verify[2] == true;
                     });
     
@@ -127,6 +127,7 @@ var app = new Vue({
                 element.type ='Tv-Series'
                 element.visible = true;                
                 this.movies.push(element);
+                //semaforo 2
                 this.verify[1] == true;
             });
         },
